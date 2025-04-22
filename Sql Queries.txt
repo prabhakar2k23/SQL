@@ -1,0 +1,251 @@
+CREATE DATABASE college;
+USE college;
+
+CREATE TABLE student (
+   id INT PRIMARY KEY,
+   name VARCHAR(50),
+   age INT NOT NULL
+);
+
+INSERT INTO student VALUES(1, "SAMRAT", 23);
+SELECT * FROM student;
+
+USE college;
+CREATE TABLE temp1 (
+   id INT UNIQUE
+);
+
+CREATE TABLE employee (
+  id INT,
+  salary INT DEFAULT 25000
+);
+
+SELECT * FROM employee;
+
+INSERT INTO employee (id) VALUES (100);
+
+DROP TABLE student;
+
+CREATE TABLE student (
+  rollno INT PRIMARY KEY,
+  name VARCHAR(50),
+  marks INT NOT NULL,
+  grade VARCHAR(1),
+  city VARCHAR(20)
+);
+
+INSERT INTO student 
+(rollno, name, marks, grade, city) 
+VALUES 
+(101, "anil", 78, "C", "Pune"),
+(102, "bhumika", 93, "A", "Mumbai"),
+(103, "chetan", 85, "B", "Mumbai"),
+(104, "dhruv", 96, "A", "Delhi"),
+(105, "sanjana", 18, "F", "Delhi"),
+(106, "minakshi", 82, "B", "Delhi");
+
+SELECT * FROM student WHERE city="Mumbai";
+
+SELECT * FROM student ORDER BY name ASC;
+
+SELECT MAX(marks) FROM student;
+
+SELECT city, COUNT(name) FROM student GROUP BY city;
+
+SELECT city, COUNT(name) FROM student GROUP BY city HAVING max(marks) > 90;
+
+UPDATE student SET grade = "O" WHERE grade = "A";
+SET SQL_SAFE_UPDATES =0;
+UPDATE student SET grade = "O" WHERE grade = "A";
+SELECT * FROM student;
+
+CREATE TABLE customer (
+ customer_id INT PRIMARY KEY,
+ customer VARCHAR(20),
+ mode varchar(20),
+ city varchar(20)
+);
+
+INSERT INTO customer 
+(customer_id, customer, mode, city) 
+VALUES 
+(101, "Olivia Barrett", "Netbanking", "Portland"),
+(102, "Ethan Sinclair", "Credit Card", "Miami"),
+(103, "Maya Hemandez", "Credit Card", "Seattle"),
+(104, "Liam Donoban", "Netbanking", "Denver"),
+(105, "Sophia Nguyen", "Credit Card", "New Orleans"),
+(106, "Caleb Foster", "Debit Card", "Minneapolls"),
+(107, "Ava Patel", "Debit Card", "Phoenix"),
+(108, "Lucas Carter", "Netbanking", "Boston"),
+(109, "Isabella Martinez", "Netbanking", "Nashville"),
+(110, "Jackson Brooks", "Credit Card", "Boston");
+
+SELECT * FROM customer;
+
+SELECT mode, COUNT(customer) FROM customer GROUP BY mode;
+
+DROP TABLE customer;
+
+CREATE TABLE dept (
+ id INT PRIMARY KEY,
+ name VARCHAR(50)
+);
+
+INSERT INTO dept 
+VALUES 
+(101, "English"),
+(102, "IT");
+
+SELECT * FROM dept;
+
+CREATE TABLE teacher ( 
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  dept_id INT,
+  FOREIGN KEY (dept_id) REFERENCES dept(id)
+  );
+  
+INSERT INTO teacher 
+VALUES
+(101, "Aman", 101),
+(102, "Eve", 102);
+
+SELECT * FROM teacher;
+
+DROP TABLE teacher;
+
+CREATE TABLE teacher ( 
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  dept_id INT,
+  FOREIGN KEY (dept_id) REFERENCES dept(id) 
+  ON UPDATE CASCADE 
+  ON DELETE CASCADE
+  );
+  
+INSERT INTO teacher 
+VALUES
+(101, "Aman", 101),
+(102, "Eve", 102);
+
+SELECT * FROM teacher;
+
+UPDATE dept 
+SET id = 103 
+WHERE id = 102;
+
+SELECT * FROM dept;
+SELECT * FROM teacher;
+
+SELECT * FROM temp1;
+INSERT INTO temp1 
+VALUES 
+(101),
+(102),
+(103);
+SELECT * FROM temp1;
+TRUNCATE TABLE temp1;
+SELECT * FROM temp1;
+
+USE college;
+CREATE TABLE tableA (
+ id INT PRIMARY KEY,
+ name VARCHAR(50)
+);
+INSERT INTO tablea 
+VALUES
+(101, "adam"),
+(102, "bob"),
+(103, "casey");
+SELECT * FROM tablea;
+
+CREATE TABLE couese (
+ id INT PRIMARY KEY,
+ course VARCHAR(50)
+);
+INSERT INTO couese
+(id, course) 
+VALUES
+(102, "english"),
+(105, "Science"),
+(107, "Math"),
+(101, "Computer Science");
+SELECT * FROM couese;
+ALTER TABLE couese
+RENAME TO course;
+
+SELECT * FROM tablea INNER JOIN course ON tablea.id = course.id;
+SELECT * FROM tablea as t LEFT JOIN course as c ON t.id = c.id;
+SELECT * FROM tablea as t RIGHT JOIN course as c ON t.id = c.id;
+SELECT * FROM tablea as t LEFT JOIN course as c ON t.id = c.id UNION SELECT * FROM tablea as t RIGHT JOIN course as c ON t.id = c.id;
+SELECT * FROM tablea as t LEFT JOIN course as c ON t.id = c.id WHERE c.id IS NULL;
+SELECT * FROM tablea as t RIGHT JOIN course as c ON t.id = c.id WHERE t.id IS NULL;
+
+DROP TABLE IF EXISTS employee;
+CREATE TABLE employee (
+ id INT PRIMARY KEY,
+ name VARCHAR(50),
+ manager_id INT
+);
+INSERT INTO employee 
+(id, name, manager_id)
+VALUES
+(101, "adam", 103),
+(102, "bob", 104),
+(103, "casey", null),
+(104, "donald", 103);
+SELECT * FROM employee;
+
+SELECT * FROM employee as a JOIN employee as b ON a.id = b.manager_id;
+SELECT a.name, b.name FROM employee as a JOIN employee as b ON a.id = b.manager_id;
+
+CREATE TABLE student (
+  rollno INT PRIMARY KEY,
+  name VARCHAR(50),
+  marks INT NOT NULL,
+  grade VARCHAR(1),
+  city VARCHAR(20)
+);
+
+INSERT INTO student 
+(rollno, name, marks, grade, city) 
+VALUES 
+(101, "anil", 78, "C", "Pune"),
+(102, "bhumika", 93, "A", "Mumbai"),
+(103, "chetan", 85, "B", "Mumbai"),
+(104, "dhruv", 96, "A", "Delhi"),
+(105, "sanjana", 18, "F", "Delhi"),
+(106, "minakshi", 82, "B", "Delhi");
+
+SELECT * FROM student;
+SELECT AVG(marks) FROM student;
+SELECT name, marks FROM student WHERE marks > 75.5667;
+SELECT name, marks FROM student WHERE marks > (SELECT AVG(marks) FROM student);
+SELECT rollno, name, marks FROM student WHERE rollno % 2 = 0;
+SELECT rollno, name FROM student WHERE rollno IN (SELECT rollno FROM student WHERE rollno % 2 = 0);
+SELECT name, marks FROM student ORDER BY marks DESC LIMIT 3;
+
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    position VARCHAR(100),
+    salary DECIMAL(10,2)
+);
+INSERT INTO employees (name, position, salary) VALUES
+('Alice Johnson', 'Software Engineer', 70000.00),
+('Bob Smith', 'Software Engineer', 70000.00),
+('Charlie Davis', 'Product Manager', 90000.00),
+('Diana Ross', 'Designer', 80000.00),
+('Ethan Clark', 'Software Engineer', 70000.00),
+('Fiona White', 'Product Manager', 90000.00),
+('George Hall', 'Designer', 85000.00),
+('Hannah Lee', 'HR Manager', 75000.00),
+('Ian Moore', 'HR Manager', 75000.00),
+('Jane King', 'Designer', 80000.00);
+SELECT * FROM employees;
+
+SELECT * FROM employees ORDER BY salary DESC LIMIT 4 OFFSET 2;
+SELECT * FROM employees WHERE salary = (SELECT salary FROM employees ORDER BY salary DESC LIMIT 1);  
+SELECT * FROM employees WHERE salary IN (SELECT salary FROM employees GROUP BY salary HAVING COUNT(*) > 1) ORDER BY salary DESC;
+SELECT AVG(salary) FROM employees;
+SELECT * FROM employees WHERE salary > (SELECT AVG(salary) FROM employees);
